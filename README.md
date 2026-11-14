@@ -185,3 +185,20 @@ Base URL: `http://localhost:4000/api`
 - **Swap maps:** the map component (`client/src/components/MapView.jsx`) uses OpenStreetMap tiles; drop in Google Maps/Mapbox with an API key if preferred.
 - **Session storage:** tokens are kept in `localStorage` for simplicity. For production, consider httpOnly cookies.
 - **Images:** listings accept direct image URLs. Uploads (e.g. to S3/Firebase Storage) are a natural extension.
+
+---
+
+## Deploy (Render, free)
+
+The repo is deploy-ready via `render.yaml` — Render builds the React client and serves it from Express as a single service.
+
+1. Open <https://render.com/deploy?repo=https://github.com/ayush007naik/stayscape>
+2. Sign in with GitHub and click **Apply**. Render runs `npm install && npm run setup && npm run build`, then `npm start`.
+3. Copy the live URL shown on the dashboard.
+
+Notes:
+
+- `NODE_VERSION=24` is set because the backend uses the built-in `node:sqlite` module.
+- `JWT_SECRET` is generated automatically by Render.
+- The free plan has an ephemeral filesystem, so SQLite resets on restart/redeploy. The server auto-seeds demo data when the database is empty, so the demo is always usable. For durable data, attach a disk and set `DB_PATH`, or swap to Postgres.
+- Every push to `main` redeploys automatically.

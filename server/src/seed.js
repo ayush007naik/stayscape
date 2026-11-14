@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import { pathToFileURL } from 'node:url';
 import { db, resetDatabase } from './db.js';
 
 const img = (id) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1200&q=80`;
@@ -296,7 +297,14 @@ async function main() {
   console.log(`Listings: ${listingIds.length}`);
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+export { main as seed };
+
+const isDirectRun =
+  process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+
+if (isDirectRun) {
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}

@@ -4,13 +4,20 @@ import { fileURLToPath } from 'node:url';
 import express from 'express';
 import cors from 'cors';
 import { config } from './config.js';
-import './db.js';
+import { db } from './db.js';
 import authRoutes from './routes/auth.js';
 import listingRoutes from './routes/listings.js';
 import bookingRoutes from './routes/bookings.js';
 import hostRoutes from './routes/host.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const listingCount = db.prepare('SELECT COUNT(*) AS count FROM listings').get().count;
+if (listingCount === 0) {
+  console.log('Empty database detected — seeding demo data...');
+  const { seed } = await import('./seed.js');
+  await seed();
+}
 
 const app = express();
 
