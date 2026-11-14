@@ -3,7 +3,7 @@ services:
     name: stayscape
     runtime: node
     plan: free
-    buildCommand: npm install && npm run setup && npm run build
+    buildCommand: npm install && npm install --prefix server --include=dev && npm install --prefix client --include=dev && npm run build
     startCommand: npm start
     healthCheckPath: /api/health
     envVars:
